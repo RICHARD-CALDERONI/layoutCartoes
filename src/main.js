@@ -44,7 +44,7 @@ const expirationDatePattern = {
 const expirationDateMasked = IMask(expirationDate, expirationDatePattern)
 
 const CardNumber = document.querySelector("#card-number")
-const cardNumberPatter = {
+const cardNumberPattern = {
   mask: [
     {
       mask: "0000 0000 0000 0000",
@@ -53,7 +53,7 @@ const cardNumberPatter = {
     },
     {
       mask: "0000 0000 0000 0000",
-      regex: /dsd/,
+      regex: /(^5[1-5]\d{0,2}|^22[2-9]\d|^2[3-7]\d{0,2})\d{0,12}/,
       cardtype: "mastercard",
     },
     {
@@ -70,4 +70,20 @@ const cardNumberPatter = {
     return foundMask
   },
 }
-const cardNumberMasked = IMask(CardNumber, cardNumberPatter)  
+const cardNumberMasked = IMask(CardNumber, cardNumberPattern) 
+
+const addButton = document.querySelector("#add-card")
+addButton.addEventListener("click", () => {
+  alert("Cartão adicionado!")
+})
+
+document.querySelector("form").addEventListener("submit", (event) => {
+  event.preventDefault()
+})
+
+const cardHolder = document.querySelector("#card-holder")
+cardHolder.addEventListener("input", () => {
+  const ccHolder = document.querySelector(".cc-holder .value")
+
+  ccHolder.innerHTML = cardHolder.value.length === 0 ? "FULANO DA SILVA" : cardHolder.value
+})
