@@ -11,7 +11,7 @@ function setCardType(type) {
     mastercard: ["#DF6F29", "#C69347"],
     default: ["black", "gray"],
   }
-  
+
   ccBgColor01.setAttribute("fill", colors[type][0])
   ccBgColor02.setAttribute("fill", colors[type][1])
   ccLogo.setAttribute("src", `cc-${type}.svg`)
@@ -38,8 +38,8 @@ const expirationDatePattern = {
       mask: IMask.MaskedRange,
       from: 1,
       to: 12,
-    }
-  }
+    },
+  },
 }
 const expirationDateMasked = IMask(expirationDate, expirationDatePattern)
 
@@ -70,7 +70,7 @@ const cardNumberPattern = {
     return foundMask
   },
 }
-const cardNumberMasked = IMask(CardNumber, cardNumberPattern) 
+const cardNumberMasked = IMask(CardNumber, cardNumberPattern)
 
 const addButton = document.querySelector("#add-card")
 addButton.addEventListener("click", () => {
@@ -85,5 +85,37 @@ const cardHolder = document.querySelector("#card-holder")
 cardHolder.addEventListener("input", () => {
   const ccHolder = document.querySelector(".cc-holder .value")
 
-  ccHolder.innerHTML = cardHolder.value.length === 0 ? "FULANO DA SILVA" : cardHolder.value
+  ccHolder.innerHTML =
+    cardHolder.value.length === 0 ? "FULANO DA SILVA" : cardHolder.value
 })
+
+securityCodeMasked.on("accept", () => {
+  updateSecurityCode(securityCodeMasked.value)
+})
+
+function updateSecurityCode(code) {
+  const ccSecutiry = document.querySelector(".cc-security .value")
+
+  ccSecutiry.innerText = code.length === 0 ? "123" : code
+}
+
+cardNumberMasked.on ("accept", () => {
+  const cardType = cardNumberMasked.masked.currentMask.cardtype
+  setCardType(cardType)
+  updateCardNumber(cardNumberMasked.value)
+ })
+
+ function updateCardNumber (number){
+  const ccNumber = document.querySelector(".cc-number")
+
+  ccNumber.innerText = number.length === 0 ? "1234 5678 9012 3456" : number
+ }
+
+ expirationDateMasked.on("accept", () => {
+  updateExpirationDate(expirationDateMasked.value)
+ })
+
+ function updateExpirationDate(date){
+  const ccExpiration = document.querySelector(".cc-extra .value")
+  ccExpiration.innerText = date.length === 0 ? "02/32" : date
+ }
